@@ -1,13 +1,13 @@
 import { useState, useEffect, useRef } from "react";
 import LoadingSpinner from "./LoadingSpinner";
 import { DocumentType } from "../lib/constants";
+import axios from "axios";
 
 interface Props {
   documents: DocumentType[];
-  saveDocuments: (documents: DocumentType[]) => Promise<any>;
 }
 
-const AutoSaveComponent = ({ documents, saveDocuments }: Props) => {
+const AutoSaveComponent = ({ documents }: Props) => {
   const [lastSaveTime, setLastSaveTime] = useState<Date | null>(null);
   const [timeSinceLastSave, setTimeSinceLastSave] = useState<number | null>(
     null
@@ -29,17 +29,20 @@ const AutoSaveComponent = ({ documents, saveDocuments }: Props) => {
     return () => clearInterval(interval);
   }, [lastSaveTime]);
 
+  const saveDocuments = async (documents: DocumentType[]) => {
+    await axios.post("/api/documents", documents);
+  };
+
   useEffect(() => {
     let interval: NodeJS.Timeout | null = null;
-    console.log("INside use Effect", documentsRef.current);
     if (documentsRef.current.length > 0) {
       interval = setTimeout(async () => {
         setIsSaving(true);
         try {
           await saveDocuments(documents);
           setLastSaveTime(new Date());
-        } catch (error) {
-          console.error("Failed to save:", error);
+        } catch (err) {
+          console.error("Failed to save:", err);
         } finally {
           setIsSaving(false);
           setTimeSinceLastSave(0);

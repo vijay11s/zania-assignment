@@ -1,13 +1,15 @@
 import DocumentCard from "./components/DocumentCard";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import AutoSaveComponent from "./components/AutoSaveComponent";
 import { DocumentType, thumbnails } from "./lib/constants";
 import Overlay from "./components/Overlay";
+import LoadingSpinner from "./components/LoadingSpinner";
 
 function App() {
   const [documents, setDocuments] = useState<DocumentType[]>([]);
   const [overlayImage, setOverlayImage] = useState<string>("");
+  const [documentsLoading, setDocumentsLoading] = useState<boolean>(false);
 
   const handleDragStart = (e: React.DragEvent, index: number) => {
     e.dataTransfer.setData("draggedItem", index.toString());
@@ -28,7 +30,6 @@ function App() {
     const [draggedItem] = reorderedDocuments.splice(draggedItemIndex, 1);
     reorderedDocuments.splice(targetIndex, 0, draggedItem);
     setDocuments(reorderedDocuments);
-    (e.target as any).classList.remove("opacity-50"); // reset visual feedback
   };
 
   useEffect(() => {
@@ -37,24 +38,28 @@ function App() {
 
   async function fetchData() {
     try {
+      setDocumentsLoading(true);
       const res = await axios.get("/api/documents");
       setDocuments(res?.data ?? []);
-    } catch (err) {}
+    } catch (err) {
+      console.error("Failed to fech data from server", err);
+    } finally {
+      setDocumentsLoading(false);
+    }
   }
 
-  const saveDocuments = useCallback(async () => {
-    try {
-      await axios.post("/api/documents", documents);
-    } catch (err) {}
-  }, []);
+  if (documentsLoading) {
+    return (
+      <div className="fixed inset-0 flex justify-center items-center">
+        <LoadingSpinner />
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-2xl mx-auto flex items-center min-h-screen justify-center">
       <div>
-        <AutoSaveComponent
-          documents={documents}
-          saveDocuments={saveDocuments}
-        />
+        <AutoSaveComponent documents={documents} />
         <div className="grid grid-cols-3 gap-12">
           {(documents ?? []).map((item, index) => (
             <div

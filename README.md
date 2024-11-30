@@ -1,50 +1,48 @@
-# React + TypeScript + Vite
+# Zania Frontend Assignment
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This React project is created using Vite and implements drag-and-drop functionality for managing cards, along with a mock REST API for data persistence and persistent storage using localStorage.
 
-Currently, two official plugins are available:
+## Prerequisites
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Before running the project, ensure the following are installed on your system:
 
-## Expanding the ESLint configuration
+- Node.js (v18 or later)
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+## Installation
 
-- Configure the top-level `parserOptions` property like this:
-
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
-
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+1. Clone the Repository
 
 ```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
-
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
+git clone <repository-url>
+cd <repository-folder>
 ```
+
+2. Install Dependencies
+
+```js
+npm install
+```
+
+3. Start the Development Server
+
+```js
+npm run dev
+```
+
+The app will be available at http://localhost:5173.
+
+## Architectural Approach
+
+Framework:
+
+- The app is built using React with TypeScript and Vite for a fast and modern development experience.
+
+Drag-and-Drop:
+
+- Implemented drag-and-drop functionality using native HTML5 Drag-and-Drop APIs.
+- State management in React ensures a seamless reordering experience.
+
+Mock API:
+
+- Used Mock Service Worker (MSW) to create a REST API for fetching and saving data.
+- Data persistence is achieved using localStorage, ensuring data remains consistent across page reloads.
