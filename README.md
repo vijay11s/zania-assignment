@@ -13,8 +13,8 @@ Before running the project, ensure the following are installed on your system:
 1. Clone the Repository
 
 ```js
-git clone <repository-url>
-cd <repository-folder>
+git clone https://github.com/vijay11s/zania-assignment.git
+cd zania-assignment
 ```
 
 2. Install Dependencies
